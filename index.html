@@ -749,7 +749,7 @@
             <div class="logo">ParkEasy</div>
             <div class="nav-links" id="navLinks">
                 <a href="#" onclick="showSection('home')">Početna</a>
-                <a href="#" onclick="showSection('myparking')">Moj Parking</a>
+                <a href="#" onclick="showSection('myparking')">Moja Parkiranja</a>
                 <a href="#" onclick="showSection('owner')">Dodaj Parking</a>
                 <button class="btn btn-secondary" onclick="openModal('loginModal')">Prijavi se</button>
                 <button class="btn btn-primary" onclick="openModal('registerModal')">Registruj se</button>
@@ -976,7 +976,7 @@
     <div id="myparkingSection" class="hidden">
         <div class="my-parking-section">
             <div class="my-parking-header">
-                <h1>Moj Parking</h1>
+                <h1>Moja Parkiranja</h1>
                 <p style="color: var(--text-light);">Pratite svoj trenutni parking i istoriju rezervacija</p>
             </div>
 
@@ -1101,6 +1101,12 @@
                                 onmouseover="this.style.color='var(--white)'"
                                 onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">Početna</a>
                         </li>
+                                       <li style="margin-bottom: 12px;">
+                            <a href="#" onclick="showSection('myparking')"
+                                style="color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.2s; font-weight: 300;"
+                                onmouseover="this.style.color='var(--white)'"
+                                onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">Moja Parkiranja</a>
+                        </li>
      
                         <li style="margin-bottom: 12px;">
                             <a href="#" onclick="showSection('owner')"
@@ -1108,12 +1114,7 @@
                                 onmouseover="this.style.color='var(--white)'"
                                 onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">Dodaj Parking Mesto</a>
                         </li>
-                        <li style="margin-bottom: 12px;">
-                            <a href="#" onclick="showSection('myparking')"
-                                style="color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.2s; font-weight: 300;"
-                                onmouseover="this.style.color='var(--white)'"
-                                onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">Moj Parking</a>
-                        </li>
+         
 
                     </ul>
                 </div>
@@ -1886,4 +1887,5 @@
 
 
 </html>
+
 
