@@ -819,20 +819,24 @@
     </div>
 
     <div id="searchSection" class="hidden">
+       <div id="searchSection" class="hidden">
         <div class="search-section">
             <div class="search-card">
                 <h2 style="margin-bottom: 24px; font-size: 24px;">Filteri</h2>
-            <div class="search-card">
-                <div class="search-form">
-                    <div class="form-group">
-                        <label>Grad</label>
-                        <select id="citySelect">
-                            <option value="">Izaberi grad</option>
-                            <option value="beograd">Beograd</option>
-                            <option value="novisad">Novi Sad</option>
-                            <option value="nis">Niš</option>
-                            <option value="kragujevac">Kragujevac</option>
-                        </select>
+                
+                <div style="margin-bottom: 24px;">
+                    <label style="font-weight: 500; margin-bottom: 8px; display: block;">Grad</label>
+                    <select id="searchCitySelect" onchange="updateCityFilter()" style="padding: 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; width: 100%; max-width: 300px;">
+                        <option value="">Svi gradovi</option>
+                        <option value="beograd">Beograd</option>
+                        <option value="novisad">Novi Sad</option>
+                        <option value="nis">Niš</option>
+                        <option value="kragujevac">Kragujevac</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 24px;">
+                    <label style="font-weight: 500; margin-bottom: 8px; display: block;">Tip parkinga</label>
                 <div style="margin-bottom: 24px;">
                     <label style="font-weight: 500; margin-bottom: 8px; display: block;">Tip parkinga</label>
                     <div class="filters">
@@ -1910,6 +1914,7 @@
 
 
 </html>
+
 
 
 
