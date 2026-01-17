@@ -749,6 +749,7 @@
             <div class="logo">ParkEasy</div>
             <div class="nav-links" id="navLinks">
                 <a href="#" onclick="showSection('home')">Početna</a>
+                <a href="#" onclick="showSection('search')">Pretraga</a>
                 <a href="#" onclick="showSection('myparking')">Moja Parkiranja</a>
                 <a href="#" onclick="showSection('owner')">Dodaj Parking</a>
                 <button class="btn btn-secondary" onclick="openModal('loginModal')">Prijavi se</button>
@@ -1001,6 +1002,12 @@
                 <div class="form-group">
                     <label>Email</label>
                     <input type="email" required>
+                           <li style="margin-bottom: 12px;">
+                            <a href="#" onclick="showSection('search')"
+                                style="color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.2s; font-weight: 300;"
+                                onmouseover="this.style.color='var(--white)'"
+                                onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">Pretraga Parkinga</a>
+                        </li>
                 </div>
                 <div class="form-group">
                     <label>Lozinka</label>
@@ -1887,5 +1894,6 @@
 
 
 </html>
+
 
 
