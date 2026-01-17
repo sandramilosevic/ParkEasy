@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="sr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParkEasy - Iznajmljivanje Parking Mesta</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2574A9;
+            --bg: #F4F4F4;
+            --white: #FFFFFF;
+            --text: #1A1A1A;
+            --text-light: #666666;
+            --border: #E0E0E0;
+            --success: #27AE60;
+            --error: #E74C3C;
+        }
+
+        body {
+            font-family: 'Inter Tight', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-weight: 500;
+        }
+
+        label {
+            font-weight: 500;
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--white);
+            padding: 16px 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 300;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: #1e5f8a;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #1e5f8a 100%);
+            color: var(--white);
+            padding: 80px 24px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 16px;
+            font-weight: 400;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 32px;
+            opacity: 0.9;
+        }
+
+        /* Search Section */
+        .search-section {
+            max-width: 1400px;
+            margin: -40px auto 40px;
+            padding: 0 24px;
+        }
+
+        .search-card {
+            background: var(--white);
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 400;
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: var(--white);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 400;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        /* Results */
+        .results-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .results-header h2 {
+            font-size: 28px;
+            font-weight: 500;
+        }
+
+        .sort-select {
+            padding: 10px 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 300;
+            cursor: pointer;
+        }
+
+        .results-grid {
+            display: grid;
+            /* PROMENJENO: minmax smanjen sa 320px na 250px kako bi stala još jedna kartica u red */
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            width: 100%;
+        }
+
+        .parking-card {
+            background: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .parking-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .parking-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .parking-info {
+            padding: 16px;
+        }
+
+        .parking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .parking-title {
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--text);
+        }
+
+        .parking-price {
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .parking-price small {
+            font-size: 12px;
+            font-weight: 300;
+        }
+
+        .parking-details {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--primary);
+            color: var(--white);
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        /* Owner Dashboard */
+        .dashboard {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 24px;
+        }
+
+        .dashboard-header {
+            margin-bottom: 32px;
+        }
+
+        .dashboard-header h1 {
+            font-size: 36px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 300;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        /* Add Parking Form */
+        .form-card {
+            background: var(--white);
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 24px;
+        }
+
+        .form-card h2 {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .form-group-full {
+            grid-column: 1 / -1;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 16px;
+            /* PROMENJENO: max-width povećan sa 300px na 600px za širi pop-out na desktopu */
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 32px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--text-light);
+            line-height: 1;
+        }
+
+        /* Map */
+        .map-container {
+            width: 100%;
+            height: 500px;
+            background: var(--border);
+            border-radius: 12px;
+            margin: 24px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+        }
+
+        .btn-search {
+            width: 30%;
+            /* Na desktopu je 50% */
+            display: block;
+            /* Omogućava centriranje */
+            margin: 0 auto;
+            margin-top: 52px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 64px;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                flex-direction: column;
+                padding: 24px;
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            }
+
+            .btn-search {
+                width: 100%;
+                /* Na manjim ekranima zauzima sve */
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+
+            .results-header {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-header h1 {
+                font-size: 28px;
+            }
+
+            /* Na mobilnom modal treba da ostane uži radi preglednosti */
+            .modal-content {
+                max-width: 100%;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: var(--success);
+            color: var(--white);
+            padding: 16px 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .success-message.active {
+            display: block;
+        }
+
+        /* My Parking Section */
+        .my-parking-section {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 24px;
+        }
+
+        .my-parking-header {
+            margin-bottom: 32px;
+        }
+
+        .my-parking-header h1 {
+            font-size: 36px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .active-parking-card {
+            background: var(--white);
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 24px;
+        }
+
+        .active-parking-card .status-badge {
+            background: var(--success);
+            color: var(--white);
+            padding: 8px 16px;
+            border-radius: 8px;
+            display: inline-block;
+            font-weight: 400;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .parking-time-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin: 24px 0;
+            padding: 24px;
+            background: var(--bg);
+            border-radius: 12px;
+        }
+
+        .time-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .time-label {
+            font-size: 12px;
+            color: var(--text-light);
+            font-weight: 300;
+            text-transform: uppercase;
+        }
+
+        .time-value {
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--text);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-navigate {
+            background: var(--success);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-navigate:hover {
+            background: #229954;
+        }
+
+        .btn-end {
+            background: var(--error);
+            color: var(--white);
+        }
+
+        .btn-end:hover {
+            background: #c0392b;
+        }
+
+        .reservation-history {
+            margin-top: 40px;
+        }
+
+        .reservation-history h2 {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 24px;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .history-item {
+            background: var(--white);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .history-info {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .history-status {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .history-status.completed {
+            background: #d5f4e6;
+            color: var(--success);
+        }
+
+        .history-status.cancelled {
+            background: #fadbd8;
+            color: var(--error);
+        }
+
+        /* Featured Listings */
+        .featured-section {
+            max-width: 1400px;
+            margin: 64px auto;
+            padding: 0 24px;
+        }
+
+        .featured-header {
+            margin-bottom: 32px;
+        }
+
+        .featured-header h2 {
+            font-size: 32px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .featured-header p {
+            color: var(--text-light);
+            font-size: 16px;
+        }
+
+        .featured-category {
+            margin-bottom: 48px;
+        }
+
+        .featured-category h3 {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            color: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">ParkEasy</div>
+            <div class="nav-links" id="navLinks">
+                <a href="#" onclick="showSection('home')">Početna</a>
+                <a href="#" onclick="showSection('search')">Pretraga</a>
+                <a href="#" onclick="showSection('myparking')">Moj Parking</a>
+                <a href="#" onclick="showSection('owner')">Dodaj Parking</a>
+                <button class="btn btn-secondary" onclick="openModal('loginModal')">Prijavi se</button>
+                <button class="btn btn-primary" onclick="openModal('registerModal')">Registruj se</button>
+            </div>
+            <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+        </div>
+    </nav>
+
+    <div id="homeSection">
+        <div class="hero">
+            <h1>Pronađi Parking u Sekundi</h1>
+            <p>Iznajmite ili ponudite privatna parking mesta i garaže</p>
+        </div>
+
+        <div class="search-section">
+            <div class="search-card">
+                <div class="search-form">
+                    <div class="form-group">
+                        <label>Grad</label>
+                        <select id="citySelect">
+                            <option value="">Izaberi grad</option>
+                            <option value="beograd">Beograd</option>
+                            <option value="novisad">Novi Sad</option>
+                            <option value="nis">Niš</option>
+                            <option value="kragujevac">Kragujevac</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Datum</label>
+                        <input type="date" id="dateInput">
+                    </div>
+                    <div class="form-group">
+                        <label>Vreme od</label>
+                        <input type="time" id="timeFromInput">
+                    </div>
+                    <div class="form-group">
+                        <label>Vreme do</label>
+                        <input type="time" id="timeToInput">
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-search" onclick="searchParking()">Pretraži Parking</button>
+            </div>
+        </div>
+
+        <div class="featured-section">
+            <div class="featured-header">
+
+
+            </div>
+
+            <div class="featured-category">
+                <h3>Po Satu</h3>
+                <div class="results-grid" id="featuredHourly"></div>
+            </div>
+
+            <div class="featured-category">
+                <h3>Po Danu</h3>
+                <div class="results-grid" id="featuredDaily"></div>
+            </div>
+
+            <div class="featured-category">
+                <h3>Po Mesecu</h3>
+                <div class="results-grid" id="featuredMonthly"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="searchSection" class="hidden">
+        <div class="search-section">
+            <div class="search-card">
+                <h2 style="margin-bottom: 24px; font-size: 24px;">Filteri</h2>
+
+                <div style="margin-bottom: 24px;">
+                    <label style="font-weight: 500; margin-bottom: 8px; display: block;">Tip parkinga</label>
+                    <div class="filters">
+                        <button class="filter-btn active" data-filter="tip" data-value="sve">Sve</button>
+                        <button class="filter-btn" data-filter="tip" data-value="otvoreno">Otvoreno mesto</button>
+                        <button class="filter-btn" data-filter="tip" data-value="garaza">Garaža</button>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 24px;">
+                    <label style="font-weight: 500; margin-bottom: 8px; display: block;">Udaljenost od centra</label>
+                    <div class="filters">
+                        <button class="filter-btn active" data-filter="udaljenost" data-value="sve">Sve</button>
+                        <button class="filter-btn" data-filter="udaljenost" data-value="centar">U centru</button>
+                        <button class="filter-btn" data-filter="udaljenost" data-value="300m">Do 500m</button>
+                        <button class="filter-btn" data-filter="udaljenost" data-value="1km">Do 1km</button>
+                    </div>
+                </div>
+
+                <div>
+                    <label style="font-weight: 500; margin-bottom: 8px; display: block;">Period</label>
+                    <div class="filters">
+                        <button class="filter-btn active" data-filter="period" data-value="sat">Po satu</button>
+                        <button class="filter-btn" data-filter="period" data-value="dan">Po danu</button>
+                        <button class="filter-btn" data-filter="period" data-value="mesec">Po mesecu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-container">
+            <div class="results-header">
+                <h2>Dostupni Parking Prostori</h2>
+                <select class="sort-select" id="sortSelect" onchange="sortResults()">
+                    <option value="cena-asc">Cena: Najniža → Najviša</option>
+                    <option value="cena-desc">Cena: Najviša → Najniža</option>
+                    <option value="udaljenost">Udaljenost od centra</option>
+                </select>
+            </div>
+
+            <div class="results-grid" id="resultsGrid">
+            </div>
+        </div>
+    </div>
+
+    <div id="ownerSection" class="hidden">
+        <div class="dashboard">
+            <div class="dashboard-header">
+                <h1>Vaša Parking Mesta</h1>
+                <p style="color: var(--text-light);">Upravljajte svojim parking mestima i pratite rezervacije</p>
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-value" style="font-weight: 500;">12</div>
+                    <div class="stat-label">Ukupno Mesta</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" style="font-weight: 500;">8</div>
+                    <div class="stat-label">Aktivnih Rezervacija</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" style="font-weight: 500;">45.600 RSD</div>
+                    <div class="stat-label">Mesečna Zarada</div>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <h2 style="margin-bottom: 0;">Dodaj Novo Parking Mesto</h2>
+                <h4 style="color: #c0392b; font-weight: 400; margin-bottom: 24px;">Napomena: Platforma zadržava 15%
+                    provizije
+                    od svake
+                    rezervacije. </h4>
+                <div id="successMsg" class="success-message">Parking mesto je uspešno dodato!</div>
+                <form id="addParkingForm" onsubmit="addParking(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Naziv</label>
+                            <input type="text" required placeholder="npr. Garaža u centru">
+                        </div>
+                        <div class="form-group">
+                            <label>Tip</label>
+                            <select required>
+                                <option value="">Izaberi tip</option>
+                                <option value="otvoreno">Otvoreno mesto</option>
+                                <option value="garaza">Garaža</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Grad</label>
+                            <select required>
+                                <option value="">Izaberi grad</option>
+                                <option value="beograd">Beograd</option>
+                                <option value="novisad">Novi Sad</option>
+                                <option value="nis">Niš</option>
+                                <option value="kragujevac">Kragujevac</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Udaljenost od centra</label>
+                            <select required>
+                                <option value="">Izaberi udaljenost</option>
+                                <option value="centar">U centru</option>
+                                <option value="500m">Do 500m</option>
+                                <option value="1km">Do 1km</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Cena po satu (RSD)</label>
+                            <input type="number" required placeholder="150">
+                        </div>
+                        <div class="form-group">
+                            <label>Cena po danu (RSD)</label>
+                            <input type="number" required placeholder="1200">
+                        </div>
+                        <div class="form-group">
+                            <label>Cena po mesecu (RSD)</label>
+                            <input type="number" required placeholder="8000">
+                        </div>
+                        <div class="form-group">
+                            <label>Adresa</label>
+                            <input type="text" required placeholder="Kneza Miloša 12">
+                        </div>
+                        <div class="form-group form-group-full">
+                            <label>Opis</label>
+                            <textarea required placeholder="Opiši parking mesto..."></textarea>
+                        </div>
+                        <div class="form-group form-group-full">
+                            <label>Slike (URL)</label>
+                            <input type="url" placeholder="https://primer.com/slika.jpg">
+                        </div>
+                    </div>
+                    <div class="map-container">Mapa - Google Maps Integracija</div>
+                    <div class="form-group form-group-full"
+                        style="display: flex; align-items: center; gap: 12px; flex-direction: row;">
+                        <input type="checkbox" id="featuredCheckbox"
+                            style="width: auto; height: 20px; cursor: pointer; margin: 32px 0;">
+                        <label for="featuredCheckbox"
+                            style="margin: 0; cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 32px 0;">
+                            <span style="font-weight: 500;">⭐ Istaknuta objava</span>
+                            <span style="font-size: 12px; font-weight: 300; color: var(--text-light); ">(+500
+                                RSD)</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Dodaj Parking Mesto</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="myparkingSection" class="hidden">
+        <div class="my-parking-section">
+            <div class="my-parking-header">
+                <h1>Moj Parking</h1>
+                <p style="color: var(--text-light);">Pratite svoj trenutni parking i istoriju rezervacija</p>
+            </div>
+
+            <div id="activeParkingContainer">
+            </div>
+
+            <div class="reservation-history">
+                <h2>Istorija Rezervacija</h2>
+                <div class="history-list" id="historyList">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Prijavi se</h2>
+                <button class="close-btn" onclick="closeModal('loginModal')">×</button>
+            </div>
+            <form onsubmit="login(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Lozinka</label>
+                    <input type="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 16px;">Prijavi se</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Registruj se</h2>
+                <button class="close-btn" onclick="closeModal('registerModal')">×</button>
+            </div>
+            <form onsubmit="register(event)">
+                <div class="form-group">
+                    <label>Ime i prezime</label>
+                    <input type="text" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Telefon</label>
+                    <input type="tel" required>
+                </div>
+                <div class="form-group">
+                    <label>Lozinka</label>
+                    <input type="password" required>
+                </div>
+                <div class="form-group">
+                    <label>Tip naloga</label>
+                    <select required>
+                        <option value="">Izaberi tip</option>
+                        <option value="driver">Vozač</option>
+                        <option value="owner">Vlasnik parking mesta</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 16px;">Registruj
+                    se</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="parkingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Parking Mesto</h2>
+                <button class="close-btn" onclick="closeModal('parkingModal')">×</button>
+            </div>
+            <div id="modalContent"></div>
+            <div style="margin-top: 24px;">
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label>Datum i vreme dolaska</label>
+                    <input type="datetime-local" id="reservationStart" style="width: 100%;">
+                </div>
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label>Datum i vreme odlaska</label>
+                    <input type="datetime-local" id="reservationEnd" style="width: 100%;">
+                </div>
+                <div style="padding: 16px; background: var(--bg); border-radius: 8px; margin-bottom: 16px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 500;">Ukupna cena:</span>
+                        <span style="font-size: 24px; font-weight: 300; color: var(--primary);" id="totalPrice">-</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="width: 100%;" onclick="confirmReservation()">Potvrdi
+                    Rezervaciju</button>
+            </div>
+        </div>
+    </div>
+    <footer style="background: var(--text); color: var(--white); margin-top: 80px;">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 60px 24px 24px;">
+            <!-- Main Footer Content -->
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 48px; margin-bottom: 48px;">
+                <!-- About Section -->
+                <div>
+                    <div style="font-size: 28px; font-weight: 500; color: var(--white); margin-bottom: 16px;">ParkEasy
+                    </div>
+                    <p style="color: rgba(255, 255, 255, 0.7); line-height: 1.6; margin-bottom: 24px;">
+                        Revolucija u pronalaženju parking mesta. Brzo, jednostavno i pristupačno za sve.
+                    </p>
+
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h3 style="font-size: 16px; font-weight: 500; margin-bottom: 20px; color: var(--white);">Brzi
+                        Linkovi</h3>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin-bottom: 12px;">
+                            <a href="#" onclick="showSection('home')"
+                                style="color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.2s; font-weight: 300;"
+                                onmouseover="this.style.color='var(--white)'"
+                                onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">Početna</a>
+                        </li>
+                        <li style="margin-bottom: 12px;">
+                            <a href="#" onclick="showSection('search')"
+                                style="color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.2s; font-weight: 300;"
+                                onmouseover="this.style.color='var(--white)'"
+                                onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">Pretraga Parkinga</a>
+                        </li>
+                        <li style="margin-bottom: 12px;">
+                            <a href="#" onclick="showSection('owner')"
+                                style="color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.2s; font-weight: 300;"
+                                onmouseover="this.style.color='var(--white)'"
+                                onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">Dodaj Parking Mesto</a>
+                        </li>
+                        <li style="margin-bottom: 12px;">
+                            <a href="#" onclick="showSection('myparking')"
+                                style="color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.2s; font-weight: 300;"
+                                onmouseover="this.style.color='var(--white)'"
+                                onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">Moj Parking</a>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <!-- Support -->
+                <div>
+                    <h3 style="font-size: 16px; font-weight: 500; margin-bottom: 20px; color: var(--white);">Podrška
+                    </h3>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+
+                        <li style="margin-bottom: 12px;">
+                            <a href="#"
+                                style="color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.2s; font-weight: 300;"
+                                onmouseover="this.style.color='var(--white)'"
+                                onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">Kontakt</a>
+                        </li>
+                        <li style="margin-bottom: 12px;">
+                            <a href="#"
+                                style="color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.2s; font-weight: 300;"
+                                onmouseover="this.style.color='var(--white)'"
+                                onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">Pomoć</a>
+                        </li>
+                        <li style="margin-bottom: 12px;">
+                            <a href="#"
+                                style="color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.2s; font-weight: 300;"
+                                onmouseover="this.style.color='var(--white)'"
+                                onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">Prijavi Problem</a>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h3 style="font-size: 16px; font-weight: 500; margin-bottom: 20px; color: var(--white);">Kontakt
+                    </h3>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin-bottom: 12px; display: flex; align-items: start; gap: 8px;">
+                            <span style="color: var(--primary); margin-top: 2px;">📧</span>
+                            <a href="mailto:info@parkeasy.rs"
+                                style="color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.2s; font-weight: 300;"
+                                onmouseover="this.style.color='var(--white)'"
+                                onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">info@parkeasy.rs</a>
+                        </li>
+                        <li style="margin-bottom: 12px; display: flex; align-items: start; gap: 8px;">
+                            <span style="color: var(--primary); margin-top: 2px;">📞</span>
+                            <a href="tel:+381 11 222 3334"
+                                style="color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.2s; font-weight: 300;"
+                                onmouseover="this.style.color='var(--white)'"
+                                onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">+381 11 222 3334</a>
+                        </li>
+                        <li style="margin-bottom: 12px; display: flex; align-items: start; gap: 8px;">
+                            <span style="color: var(--primary); margin-top: 2px;">📍</span>
+                            <span style="color: rgba(255, 255, 255, 0.7); font-weight: 300;">Knez Mihailova 10<br>11000
+                                Beograd, Srbija</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div style="height: 1px; background: rgba(255, 255, 255, 0.1); margin: 40px 0;"></div>
+
+            <!-- Bottom Footer -->
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px;">
+                <p style="color: rgba(255, 255, 255, 0.5); font-size: 14px; font-weight: 300; margin: 0;">
+                    © 2026 ParkEasy. Sva prava zadržana.
+                </p>
+                <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+                    <a href="#"
+                        style="color: rgba(255, 255, 255, 0.5); text-decoration: none; font-size: 14px; font-weight: 300; transition: color 0.2s;"
+                        onmouseover="this.style.color='var(--white)'"
+                        onmouseout="this.style.color='rgba(255, 255, 255, 0.5)'">Uslovi Korišćenja</a>
+                    <a href="#"
+                        style="color: rgba(255, 255, 255, 0.5); text-decoration: none; font-size: 14px; font-weight: 300; transition: color 0.2s;"
+                        onmouseover="this.style.color='var(--white)'"
+                        onmouseout="this.style.color='rgba(255, 255, 255, 0.5)'">Politika Privatnosti</a>
+                    <a href="#"
+                        style="color: rgba(255, 255, 255, 0.5); text-decoration: none; font-size: 14px; font-weight: 300; transition: color 0.2s;"
+                        onmouseover="this.style.color='var(--white)'"
+                        onmouseout="this.style.color='rgba(255, 255, 255, 0.5)'">Kolačići</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sample parking data
+        const parkingData = [
+            {
+                id: 1,
+                naziv: "Garaža Knez Mihailova",
+                tip: "garaza",
+                grad: "beograd",
+                udaljenost: "centar",
+                cenaSat: 200,
+                cenaDan: 1500,
+                cenaMesec: 12000,
+                opis: "Bezbedna garaža u samom centru Beograda, blizu glavne pešačke zone.",
+                adresa: "Knez Mihailova 25",
+                slika: "Slike/garaza1.jpg"
+            },
+            {
+                id: 2,
+                naziv: "Parking Kod Kalemegdana",
+                tip: "otvoreno",
+                grad: "beograd",
+                udaljenost: "centar",
+                cenaSat: 150,
+                cenaDan: 1000,
+                cenaMesec: 8000,
+                opis: "Otvoreno parking mesto u blizini Kalemegdanske tvrđave.",
+                adresa: "Pariska 12",
+                slika: "Slike/parking.jpg"
+            },
+            {
+                id: 3,
+                naziv: "Garaža Novi Sad Centar",
+                tip: "garaza",
+                grad: "novisad",
+                udaljenost: "500m",
+                cenaSat: 180,
+                cenaDan: 1200,
+                cenaMesec: 10000,
+                opis: "Moderna garaža sa video nadzorom, 500m od centra.",
+                adresa: "Zmaj Jovina 8",
+                slika: "Slike/garaza2.jpg"
+            },
+            {
+                id: 4,
+                naziv: "Parking Slavija",
+                tip: "otvoreno",
+                grad: "beograd",
+                udaljenost: "1km",
+                cenaSat: 120,
+                cenaDan: 800,
+                cenaMesec: 6500,
+                opis: "Parking mesto u blizini trga Slavija, dobra povezanost.",
+                adresa: "Beogradska 45",
+                slika: "Slike/parking2.jpg"
+            },
+            {
+                id: 5,
+                naziv: "Garaža Niš Centar",
+                tip: "garaza",
+                grad: "nis",
+                udaljenost: "centar",
+                cenaSat: 160,
+                cenaDan: 1100,
+                cenaMesec: 9000,
+                opis: "Sigurna garaža u centru Niša, dostupna 24/7.",
+                adresa: "Obrenovićeva 22",
+                slika: "Slike/garaza3.jpg"
+            },
+            {
+                id: 6,
+                naziv: "Parking Kragujevac",
+                tip: "otvoreno",
+                grad: "kragujevac",
+                udaljenost: "500m",
+                cenaSat: 100,
+                cenaDan: 500,
+                cenaMesec: 5500,
+                opis: "Parking u mirnom delu grada, blizu glavnih saobraćajnica.",
+                adresa: "Kralja Petra 15",
+                slika: "Slike/parking3.jpg"
+            },
+            {
+                id: 7,
+                naziv: "Garaža Dorćol",
+                tip: "garaza",
+                grad: "beograd",
+                udaljenost: "500m",
+                cenaSat: 170,
+                cenaDan: 1300,
+                cenaMesec: 10500,
+                opis: "Moderna garaža u Dorćolu, odlična za duži boravak.",
+                adresa: "Dušanova 32",
+                slika: "Slike/garaza4.jpg"
+            },
+            {
+                id: 8,
+                naziv: "Parking Novi Sad Petrovaradin",
+                tip: "otvoreno",
+                grad: "novisad",
+                udaljenost: "1km",
+                cenaSat: 90,
+                cenaDan: 650,
+                cenaMesec: 5000,
+                opis: "Parking kod Petrovaradinske tvrđave, mirna lokacija.",
+                adresa: "Preradovićeva 18",
+                slika: "Slike/parking4.jpg"
+            },
+            {
+                id: 9,
+                naziv: "Garaža Vračar",
+                tip: "garaza",
+                grad: "beograd",
+                udaljenost: "500m",
+                cenaSat: 190,
+                cenaDan: 1400,
+                cenaMesec: 11000,
+                opis: "Garaža u Vračaru, blizu Hrama Svetog Save.",
+                adresa: "Kralja Milana 28",
+                slika: "Slike/garaza5.jpg"
+            }
+        ];
+
+        let currentFilters = {
+            tip: 'sve',
+            udaljenost: 'sve',
+            period: 'sat',
+            grad: '',
+            sort: 'cena-asc'
+        };
+
+        let filteredData = [];
+        let currentParkingId = null;
+        let activeReservation = null;
+
+        // Sample reservation history
+        const reservationHistory = [
+            {
+                id: 1,
+                parkingNaziv: "Garaža Knez Mihailova",
+                adresa: "Knez Mihailova 25",
+                grad: "Beograd",
+                start: "2026-01-10 09:00",
+                end: "2026-01-10 17:00",
+                cena: 1600,
+                status: "completed"
+            },
+            {
+                id: 2,
+                parkingNaziv: "Parking Slavija",
+                adresa: "Beogradska 45",
+                grad: "Beograd",
+                start: "2026-01-08 14:00",
+                end: "2026-01-08 18:00",
+                cena: 480,
+                status: "completed"
+            },
+            {
+                id: 3,
+                parkingNaziv: "Garaža Novi Sad Centar",
+                adresa: "Zmaj Jovina 8",
+                grad: "Novi Sad",
+                start: "2026-01-05 10:00",
+                end: "2026-01-06 10:00",
+                cena: 1200,
+                status: "completed"
+            }
+        ];
+
+        // Initialize featured listings on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            displayFeaturedListings();
+        });
+
+        // Display featured listings
+        function displayFeaturedListings() {
+            // By hour - prva kartica je istaknuta
+            const hourlyListings = [...parkingData]
+                .sort((a, b) => a.cenaSat - b.cenaSat)
+                .slice(0, 3);
+            const hourlyHTML = hourlyListings.map((parking, index) =>
+                index === 0 ? createFeaturedParkingCard(parking, 'sat') : createParkingCard(parking, 'sat')
+            ).join('');
+            document.getElementById('featuredHourly').innerHTML = hourlyHTML;
+
+            // By day - prva kartica je istaknuta
+            const dailyListings = [...parkingData]
+                .sort((a, b) => a.cenaDan - b.cenaDan)
+                .slice(0, 3);
+            const dailyHTML = dailyListings.map((parking, index) =>
+                index === 0 ? createFeaturedParkingCard(parking, 'dan') : createParkingCard(parking, 'dan')
+            ).join('');
+            document.getElementById('featuredDaily').innerHTML = dailyHTML;
+
+            // By month - prva kartica je istaknuta
+            const monthlyListings = [...parkingData]
+                .sort((a, b) => a.cenaMesec - b.cenaMesec)
+                .slice(0, 3);
+            const monthlyHTML = monthlyListings.map((parking, index) =>
+                index === 0 ? createFeaturedParkingCard(parking, 'mesec') : createParkingCard(parking, 'mesec')
+            ).join('');
+            document.getElementById('featuredMonthly').innerHTML = monthlyHTML;
+        }
+
+        // Display listings in a container
+        function displayListings(data, containerId, period) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = data.map(parking => createParkingCard(parking, period)).join('');
+        }
+
+        // Create parking card HTML (OBIČNA BELA KARTICA)
+        function createParkingCard(parking, period) {
+            let cena, perioda;
+            if (period === 'sat') {
+                cena = parking.cenaSat;
+                perioda = '/sat';
+            } else if (period === 'dan') {
+                cena = parking.cenaDan;
+                perioda = '/dan';
+            } else {
+                cena = parking.cenaMesec;
+                perioda = '/mesec';
+            }
+
+            const tipText = parking.tip === 'garaza' ? 'Garaža' : 'Otvoreno mesto';
+            const udaljenostText = parking.udaljenost === 'centar' ? 'U centru' :
+                parking.udaljenost === '500m' ? 'Do 500m od centra' : 'Do 1km od centra';
+
+            return `
+            <div class="parking-card" onclick="openParkingModal(${parking.id})">
+<div class="parking-image" style="background-image: url('${parking.slika}'); background-size: cover; background-position: center;">Slika parkinga</div>                <div class="parking-info">
+                    <div class="parking-header">
+                        <div class="parking-title">${parking.naziv}</div>
+                        <div class="parking-price">${cena} RSD<br><small>${perioda}</small></div>
+                    </div>
+                    <div class="parking-details">
+                        <div class="detail-item">
+                            <span class="badge">${tipText}</span>
+                        </div>
+                        <div class="detail-item">${udaljenostText}</div>
+                        <div class="detail-item">${parking.adresa}</div>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        // Create FEATURED parking card with BLUE background (NOVA FUNKCIJA)
+        function createFeaturedParkingCard(parking, period) {
+            let cena, perioda;
+            if (period === 'sat') {
+                cena = parking.cenaSat;
+                perioda = '/sat';
+            } else if (period === 'dan') {
+                cena = parking.cenaDan;
+                perioda = '/dan';
+            } else {
+                cena = parking.cenaMesec;
+                perioda = '/mesec';
+            }
+
+            const tipText = parking.tip === 'garaza' ? 'Garaža' : 'Otvoreno mesto';
+            const udaljenostText = parking.udaljenost === 'centar' ? 'U centru' :
+                parking.udaljenost === '500m' ? 'Do 500m od centra' : 'Do 1km od centra';
+
+            return `
+            <div class="parking-card" onclick="openParkingModal(${parking.id})" style="background: linear-gradient(135deg, var(--primary) 0%, #1e5f8a 100%); color: var(--white); position: relative; overflow: hidden;">
+                <!-- Featured Badge -->
+                <div style="position: absolute; top: 16px; right: 16px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; z-index: 10; border: 1px solid rgba(255, 255, 255, 0.3);">
+                    ⭐ ISTAKNUTO
+                </div>
+                
+          <div class="parking-image" style="position: relative; background-image: url('${parking.slika}'); background-size: cover; background-position: center;">
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent 0%, rgba(37, 116, 169, 0.3) 100%);"></div>
+    Slika parkinga
+</div>
+                
+                <div class="parking-info">
+                    <div class="parking-header">
+                        <div class="parking-title" style="color: var(--white);">${parking.naziv}</div>
+                        <div class="parking-price" style="color: var(--white); text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                            ${cena} RSD<br><small>${perioda}</small>
+                        </div>
+                    </div>
+                    <div class="parking-details">
+                        <div class="detail-item" style="color: rgba(255, 255, 255, 0.9);">
+                            <span class="badge" style="background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3);">${tipText}</span>
+                        </div>
+                        <div class="detail-item" style="color: rgba(255, 255, 255, 0.9);">📍 ${udaljenostText}</div>
+                        <div class="detail-item" style="color: rgba(255, 255, 255, 0.9);">📌 ${parking.adresa}</div>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        // Navigation
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        function showSection(section) {
+            document.getElementById('homeSection').classList.add('hidden');
+            document.getElementById('searchSection').classList.add('hidden');
+            document.getElementById('ownerSection').classList.add('hidden');
+            document.getElementById('myparkingSection').classList.add('hidden');
+
+            if (section === 'home') {
+                document.getElementById('homeSection').classList.remove('hidden');
+            } else if (section === 'search') {
+                document.getElementById('searchSection').classList.remove('hidden');
+                performSearch();
+            } else if (section === 'owner') {
+                document.getElementById('ownerSection').classList.remove('hidden');
+            } else if (section === 'myparking') {
+                document.getElementById('myparkingSection').classList.remove('hidden');
+                displayMyParking();
+            }
+
+            // Close mobile menu
+            document.getElementById('navLinks').classList.remove('active');
+        }
+
+        // Search functionality
+        function searchParking() {
+            const city = document.getElementById('citySelect').value;
+            if (!city) {
+                alert('Molimo izaberite grad');
+                return;
+            }
+            currentFilters.grad = city;
+            showSection('search');
+        }
+
+        function performSearch() {
+            filteredData = parkingData.filter(parking => {
+                if (currentFilters.grad && parking.grad !== currentFilters.grad) return false;
+                if (currentFilters.tip !== 'sve' && parking.tip !== currentFilters.tip) return false;
+                if (currentFilters.udaljenost !== 'sve' && parking.udaljenost !== currentFilters.udaljenost) return false;
+                return true;
+            });
+
+            sortResults();
+        }
+
+        function sortResults() {
+            const sortValue = document.getElementById('sortSelect').value;
+            const period = currentFilters.period;
+
+            if (sortValue === 'cena-asc') {
+                filteredData.sort((a, b) => {
+                    const priceA = period === 'sat' ? a.cenaSat : period === 'dan' ? a.cenaDan : a.cenaMesec;
+                    const priceB = period === 'sat' ? b.cenaSat : period === 'dan' ? b.cenaDan : b.cenaMesec;
+                    return priceA - priceB;
+                });
+            } else if (sortValue === 'cena-desc') {
+                filteredData.sort((a, b) => {
+                    const priceA = period === 'sat' ? a.cenaSat : period === 'dan' ? a.cenaDan : a.cenaMesec;
+                    const priceB = period === 'sat' ? b.cenaSat : period === 'dan' ? b.cenaDan : b.cenaMesec;
+                    return priceB - priceA;
+                });
+            } else if (sortValue === 'udaljenost') {
+                const order = { 'centar': 1, '500m': 2, '1km': 3 };
+                filteredData.sort((a, b) => order[a.udaljenost] - order[b.udaljenost]);
+            }
+
+            displayListings(filteredData, 'resultsGrid', period);
+        }
+
+        // Filter buttons
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('filter-btn')) {
+                const filter = e.target.dataset.filter;
+                const value = e.target.dataset.value;
+
+                // Update active state
+                document.querySelectorAll(`[data-filter="${filter}"]`).forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                e.target.classList.add('active');
+
+                // Update filter
+                currentFilters[filter] = value;
+
+                // Reapply search
+                performSearch();
+            }
+        });
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function openParkingModal(parkingId) {
+            const parking = parkingData.find(p => p.id === parkingId);
+            if (!parking) return;
+
+            currentParkingId = parkingId;
+
+            document.getElementById('modalTitle').textContent = parking.naziv;
+
+            const period = currentFilters.period;
+            let cena, perioda;
+            if (period === 'sat') {
+                cena = parking.cenaSat;
+                perioda = 'po satu';
+            } else if (period === 'dan') {
+                cena = parking.cenaDan;
+                perioda = 'po danu';
+            } else {
+                cena = parking.cenaMesec;
+                perioda = 'po mesecu';
+            }
+
+            const tipText = parking.tip === 'garaza' ? 'Garaža' : 'Otvoreno mesto';
+            const udaljenostText = parking.udaljenost === 'centar' ? 'U centru' :
+                parking.udaljenost === '500m' ? 'Do 500m od centra' : 'Do 1km od centra';
+
+            document.getElementById('modalContent').innerHTML = `
+            <div style="margin-bottom: 16px;">
+                <div style="font-size: 28px; font-weight: 300; color: var(--primary); margin-bottom: 8px;">
+                    ${cena} RSD <small style="font-size: 14px; font-weight: 300;">${perioda}</small>
+                </div>
+                <span class="badge">${tipText}</span>
+            </div>
+            <div style="margin-bottom: 16px;">
+                <strong>Adresa:</strong> ${parking.adresa}<br>
+                <strong>Udaljenost:</strong> ${udaljenostText}<br>
+                <strong>Grad:</strong> ${parking.grad.charAt(0).toUpperCase() + parking.grad.slice(1)}
+            </div>
+            <div style="margin-bottom: 16px;">
+                <strong>Opis:</strong><br>
+                ${parking.opis}
+            </div>
+            <div class="map-container" style="height: 250px;">Google Maps - ${parking.adresa}</div>`;
+
+            // Set default dates
+            const now = new Date();
+            const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+            document.getElementById('reservationStart').value = formatDateTimeLocal(now);
+            document.getElementById('reservationEnd').value = formatDateTimeLocal(tomorrow);
+
+            calculateTotalPrice();
+
+            openModal('parkingModal');
+        }
+
+        function formatDateTimeLocal(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${year}-${month}-${day}T${hours}:${minutes}`;
+        }
+
+        function calculateTotalPrice() {
+            const parking = parkingData.find(p => p.id === currentParkingId);
+            if (!parking) return;
+
+            const start = new Date(document.getElementById('reservationStart').value);
+            const end = new Date(document.getElementById('reservationEnd').value);
+
+            if (isNaN(start.getTime()) || isNaN(end.getTime()) || end <= start) {
+                document.getElementById('totalPrice').textContent = '-';
+                return;
+            }
+
+            const hours = (end - start) / (1000 * 60 * 60);
+            const days = hours / 24;
+            const months = days / 30;
+
+            let total = 0;
+            if (months >= 1) {
+                total = Math.ceil(months) * parking.cenaMesec;
+            } else if (days >= 1) {
+                total = Math.ceil(days) * parking.cenaDan;
+            } else {
+                total = Math.ceil(hours) * parking.cenaSat;
+            }
+
+            document.getElementById('totalPrice').textContent = total.toLocaleString('sr-RS') + ' RSD';
+        }
+
+        // Update price when dates change
+        document.addEventListener('change', function (e) {
+            if (e.target.id === 'reservationStart' || e.target.id === 'reservationEnd') {
+                calculateTotalPrice();
+            }
+        });
+
+        function confirmReservation() {
+            const parking = parkingData.find(p => p.id === currentParkingId);
+            const start = document.getElementById('reservationStart').value;
+            const end = document.getElementById('reservationEnd').value;
+            const totalPrice = document.getElementById('totalPrice').textContent;
+
+            if (!start || !end || totalPrice === '-') {
+                alert('Molimo unesite validan datum i vreme.');
+                return;
+            }
+
+            // Create active reservation
+            activeReservation = {
+                parking: parking,
+                start: start,
+                end: end,
+                price: totalPrice,
+                startTime: new Date(start)
+            };
+
+            closeModal('parkingModal');
+
+            // Show success message and navigate to My Parking
+            setTimeout(() => {
+                alert('Rezervacija je uspešno potvrđena! Vaš parking vas čeka.');
+                showSection('myparking');
+            }, 300);
+        }
+
+        function displayMyParking() {
+            const container = document.getElementById('activeParkingContainer');
+            const historyContainer = document.getElementById('historyList');
+
+            if (activeReservation) {
+                const parking = activeReservation.parking;
+                const startDate = new Date(activeReservation.start);
+                const endDate = new Date(activeReservation.end);
+                const now = new Date();
+
+                const remainingTime = endDate - now;
+                const remainingHours = Math.floor(remainingTime / (1000 * 60 * 60));
+                const remainingMinutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+
+                container.innerHTML = `
+                <div class="active-parking-card">
+                    <div class="status-badge">AKTIVNO PARKIRANJE</div>
+                    <h2 style="font-size: 28px; font-weight: 300; margin-bottom: 16px;">${parking.naziv}</h2>
+                    <p style="color: var(--text-light); margin-bottom: 24px;">${parking.adresa}, ${parking.grad.charAt(0).toUpperCase() + parking.grad.slice(1)}</p>
+                    
+                    <div class="parking-time-info">
+                        <div class="time-item">
+                            <div class="time-label">Početak</div>
+                            <div class="time-value">${formatDisplayDateTime(startDate)}</div>
+                        </div>
+                        <div class="time-item">
+                            <div class="time-label">Kraj</div>
+                            <div class="time-value">${formatDisplayDateTime(endDate)}</div>
+                        </div>
+                        <div class="time-item">
+                            <div class="time-label">Preostalo vreme</div>
+                            <div class="time-value">${remainingHours}h ${remainingMinutes}min</div>
+                        </div>
+                        <div class="time-item">
+                            <div class="time-label">Ukupna cena</div>
+                            <div class="time-value">${activeReservation.price}</div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-navigate" onclick="navigateToParking()">
+                            <span>📍</span> Navigacija do parkinga
+                        </button>
+                        <button class="btn btn-primary" onclick="saveLocation()">Sačuvaj GPS Lokaciju</button>
+                        <button class="btn btn-end" onclick="endParking()">Završi Parkiranje</button>
+                    </div>
+                </div>`;
+            } else {
+                container.innerHTML = `
+                <div class="active-parking-card">
+                    <p style="text-align: center; color: var(--text-light); padding: 40px 0;">Trenutno nemate aktivno parkiranje.</p>
+                    <button class="btn btn-primary btn-search"onclick="showSection('search')">Pronađi Parking</button>
+                </div>`;
+            }
+
+            // Display history
+            historyContainer.innerHTML = reservationHistory.map(item => `
+            <div class="history-item">
+                <div class="history-info">
+                    <h3 style="font-weight: 300; margin-bottom: 4px;">${item.parkingNaziv}</h3>
+                    <p style="color: var(--text-light); font-size: 14px;">${item.adresa}, ${item.grad}</p>
+                    <p style="font-size: 14px; margin-top: 8px;">${formatDisplayDateTime(new Date(item.start))} - ${formatDisplayDateTime(new Date(item.end))}</p>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 20px; font-weight: 300; color: var(--primary); margin-bottom: 8px;">
+                        ${item.cena.toLocaleString('sr-RS')} RSD
+                    </div>
+                    <span class="history-status ${item.status}">${item.status === 'completed' ? 'Završeno' : 'Otkazano'}</span>
+                </div>
+            </div>`
+            ).join('');
+        }
+
+        function formatDisplayDateTime(date) {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${day}.${month}.${year} ${hours}:${minutes}`;
+        }
+
+        function navigateToParking() {
+            if (activeReservation) {
+                const address = encodeURIComponent(activeReservation.parking.adresa + ', ' + activeReservation.parking.grad);
+                window.open(`https://www.google.com/maps/search/?api=1&query=${address}`, '_blank');
+            }
+        }
+
+        function saveLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        alert(`GPS Lokacija sačuvana!\nLat: ${position.coords.latitude}\nLng: ${position.coords.longitude}`);
+                    },
+                    (error) => {
+                        alert('Trenutno nije moguće pristupiti GPS lokaciji. Molimo omogućite lokacijske servise.');
+                    }
+                );
+            } else {
+                alert('Vaš pretraživač ne podržava GPS lokaciju.');
+            }
+        }
+
+        function endParking() {
+            if (confirm('Da li ste sigurni da želite da završite parkiranje?')) {
+                // Add to history
+                reservationHistory.unshift({
+                    id: Date.now(),
+                    parkingNaziv: activeReservation.parking.naziv,
+                    adresa: activeReservation.parking.adresa,
+                    grad: activeReservation.parking.grad.charAt(0).toUpperCase() + activeReservation.parking.grad.slice(1),
+                    start: activeReservation.start,
+                    end: activeReservation.end,
+                    cena: parseInt(activeReservation.price.replace(/[^\d]/g, '')),
+                    status: 'completed'
+                });
+
+                activeReservation = null;
+                displayMyParking();
+                alert('Parkiranje je uspešno završeno!');
+            }
+        }
+
+        function reserveParking() {
+            alert('Rezervacija je uspešno poslata! Dobićete potvrdu na email.');
+            closeModal('parkingModal');
+        }
+
+        // Forms
+        function login(e) {
+            e.preventDefault();
+            alert('Uspešno ste se prijavili!');
+            closeModal('loginModal');
+        }
+
+        function register(e) {
+            e.preventDefault();
+            alert('Uspešno ste se registrovali!');
+            closeModal('registerModal');
+        }
+
+        function addParking(e) {
+            e.preventDefault();
+            document.getElementById('successMsg').classList.add('active');
+            setTimeout(() => {
+                document.getElementById('successMsg').classList.remove('active');
+            }, 3000);
+            e.target.reset();
+        }
+
+        // Close modals on outside click
+        window.onclick = function (e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+
+</html>
