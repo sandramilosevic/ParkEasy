@@ -750,7 +750,7 @@
             <div class="nav-links" id="navLinks">
                 <a href="#" onclick="showSection('home')">Početna</a>
                 <a href="#" onclick="showSection('search')">Pretraga</a>
-                <a href="#" onclick="showSection('myparking')">Moja Parkiranja</a>
+                <a href="#" onclick="showSection('myparking')">Moj Parking</a>
                 <a href="#" onclick="showSection('owner')">Dodaj Parking</a>
                 <button class="btn btn-secondary" onclick="openModal('loginModal')">Prijavi se</button>
                 <button class="btn btn-primary" onclick="openModal('registerModal')">Registruj se</button>
@@ -818,24 +818,10 @@
         </div>
     </div>
 
-                <div id="searchSection" class="hidden">
+    <div id="searchSection" class="hidden">
         <div class="search-section">
             <div class="search-card">
                 <h2 style="margin-bottom: 24px; font-size: 24px;">Filteri</h2>
-                
-                <div style="margin-bottom: 24px;">
-                    <label style="font-weight: 500; margin-bottom: 8px; display: block;">Grad</label>
-                    <div class="filters">
-                        <button class="filter-btn active" data-filter="grad" data-value="">Svi gradovi</button>
-                        <button class="filter-btn" data-filter="grad" data-value="beograd">Beograd</button>
-                        <button class="filter-btn" data-filter="grad" data-value="novisad">Novi Sad</button>
-                        <button class="filter-btn" data-filter="grad" data-value="nis">Niš</button>
-                        <button class="filter-btn" data-filter="grad" data-value="kragujevac">Kragujevac</button>
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 24px;">
-                    <label style="font-weight: 500; margin-bottom: 8px; display: block;">Tip parkinga</label>
 
                 <div style="margin-bottom: 24px;">
                     <label style="font-weight: 500; margin-bottom: 8px; display: block;">Tip parkinga</label>
@@ -991,7 +977,7 @@
     <div id="myparkingSection" class="hidden">
         <div class="my-parking-section">
             <div class="my-parking-header">
-                <h1>Moja Parkiranja</h1>
+                <h1>Moj Parking</h1>
                 <p style="color: var(--text-light);">Pratite svoj trenutni parking i istoriju rezervacija</p>
             </div>
 
@@ -1132,7 +1118,7 @@
                             <a href="#" onclick="showSection('myparking')"
                                 style="color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.2s; font-weight: 300;"
                                 onmouseover="this.style.color='var(--white)'"
-                                onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">Moja parkiranja</a>
+                                onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">Moj Parking</a>
                         </li>
 
                     </ul>
@@ -1904,7 +1890,4 @@
     </script>
 </body>
 
-
 </html>
-
-
